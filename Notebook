@@ -1,0 +1,5 @@
+import numpy as np
+import matplotlib.pyplot as plt
+%matplotlib inline
+import requests #lets us grab the webpage from the internet
+from bs4 import BeautifulSoup 
