@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import requests #lets us grab the webpage from the internet
 from bs4 import BeautifulSoup 
 
-#get teams
+##get teams
 
 url = "https://www.ncaa.com/standings/basketball-men/d1" #file
 page = requests.get(url)
@@ -21,3 +21,21 @@ for i in range(0,len(teams)):
     teams[i] = ts[i].text #takes the team names out of the object being held by t[i]
 
 print(teams) # printing an array of team names
+
+##get overall and conference win/loss stats
+
+tmat = np.zeros((len(teams),len(teams)))
+gamectr = 0
+tstats = []
+tables = soup.findAll('table')
+
+for table in tables:
+    table_body = table.find('tbody')
+    rows = table_body.find_all('tr')
+    for row in rows:
+        cols = row.find_all('td')
+        cols = [ele.text.strip() for ele in cols]
+        tstats.append([ele for ele in cols if ele])
+print(len(tstats))
+for row in tstats:
+    print(row)
