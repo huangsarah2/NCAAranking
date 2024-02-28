@@ -3,3 +3,21 @@ import matplotlib.pyplot as plt
 %matplotlib inline
 import requests #lets us grab the webpage from the internet
 from bs4 import BeautifulSoup 
+
+#get teams
+
+url = "https://www.ncaa.com/standings/basketball-men/d1" #file
+page = requests.get(url)
+soup = BeautifulSoup(page.content, "html.parser") #object that helps read website
+
+if (page.status_code == 200): #can get page "good"
+    ts = soup.find_all(class_="standings-team") #going to find all <span class="game...">x</span>
+
+teams = [None]*len(ts)  #empty array of teams
+
+print(f"Found {len(teams)} teams.")
+
+for i in range(0,len(teams)):
+    teams[i] = ts[i].text #takes the team names out of the object being held by t[i]
+
+print(teams) # printing an array of team names
