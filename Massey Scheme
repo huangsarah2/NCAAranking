@@ -1,0 +1,10 @@
+#printing out the sorted list
+np.set_printoptions(precision=4, linewidth=100)
+zipped = zip(r,teams)
+sortedData = (sorted(zipped))
+
+print(sortedData)
+
+for i in range(0, len(sortedData)):
+    print(f"{sortedData[i][0]:4.2f}: {sortedData[i][1]}")
+    #print("\n")
