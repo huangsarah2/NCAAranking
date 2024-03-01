@@ -1,3 +1,54 @@
+
+################### Massey Unweighted ###################
+numgames=len(games)
+nteams=len(teams)
+
+#create tournament as an 8x8 matrix of zeros
+Tournament = np.zeros((numgames,nteams))
+b=np.zeros((numgames, 1))
+#print(type(Tournament))
+
+#do one game for each --store in matrix
+#would like to take the difference of the scores and who loses this is to fill in A
+
+for i in range(numgames):
+    ateam = games[i][0]
+    hteam = games[i][1]
+    ascore = games[i][2]
+    hscore = games[i][3]
+    
+    h_index = teams.index(hteam) #index associated with home team
+    a_index = teams.index(ateam)
+ 
+    #fill in the matrix
+    if (hscore >= ascore):
+        Tournament[i, h_index] = 1
+        Tournament[i, a_index] = -1
+        b[i] = int(hscore) - int(ascore)
+        
+    elif (ascore > hscore):
+        Tournament[i, h_index] = -1       
+        Tournament[i, a_index] = 1
+        #b is the vector of the differences of scores, but first cast as integers
+        b[i] = int(ascore) - int(hscore)        
+    Tournament
+        
+#if they tie, it is just a row of zeros, now solve with the method of least squares
+       
+M2 = np.dot(Tournament.T, Tournament)
+B2 = np.dot(Tournament.T, b)
+#replace the bottom row with all ones to prevent singular matrix
+
+M2[-1] = np.ones(nteams)
+B2[-1] = 0
+
+#solve for r
+
+r = np.linalg.solve(M2, B2)
+
+for i in range(0, nteams):
+    print(f"{teams[i]}: {r[i][0]:4.2f}")
+
 #printing out the sorted list
 np.set_printoptions(precision=4, linewidth=100)
 zipped = zip(r,teams)
