@@ -1,10 +1,11 @@
+################### Basic Import ###################
 import numpy as np
 import matplotlib.pyplot as plt
 %matplotlib inline
 import requests #lets us grab the webpage from the internet
 from bs4 import BeautifulSoup 
 
-##get teams
+################### Get Teams - Web Scraping ###################
 
 url = "https://www.ncaa.com/standings/basketball-men/d1" #file
 page = requests.get(url)
@@ -22,7 +23,7 @@ for i in range(0,len(teams)):
 
 print(teams) # printing an array of team names
 
-##get overall and conference win/loss stats
+################### Get Overall and Conference win/loss stats - Web Scraping ###################
 
 tmat = np.zeros((len(teams),len(teams)))
 gamectr = 0
@@ -40,10 +41,8 @@ print(len(tstats))
 for row in tstats:
     print(row)
 
-
-#getting games between teams
+################### Getting Games Between Teams - Web Scraping with Dates ###################
 #loop over season dates and extract games
-
 
 years = [2023,2023,2024,2024]#
 months = ["11", "12", "01", "02"]
@@ -95,7 +94,7 @@ print(f"Processed {gamectr} games!")
 print("")
 
 
-#massey unweighted
+################### Massey Unweighted ###################
 numgames=len(games)
 nteams=len(teams)
 
@@ -144,3 +143,51 @@ r = np.linalg.solve(M2, B2)
 
 for i in range(0, nteams):
     print(f"{teams[i]}: {r[i][0]:4.2f}")
+
+################### Colley Unweighted ###################
+nteams = len(teams)
+
+Cmat = 2.*np.identity(nteams)
+bvec = np.ones(nteams)
+
+for i in range(len(games)):
+    
+    ateam = games[i][0]
+    hteam = games[i][1]
+    ascore = games[i][2]
+    hscore = games[i][3]
+    
+    hidx = teams.index(hteam)
+    aidx = teams.index(ateam)
+    
+    Cmat[aidx,aidx] += 1
+    Cmat[hidx,hidx] += 1
+
+    Cmat[hidx,aidx] -= 1
+    Cmat[aidx,hidx] -= 1
+        
+    
+    if (ascore > hscore):
+        bvec[aidx] += 0.5
+        bvec[hidx] -= 0.5
+    elif (hscore > ascore):
+        bvec[aidx] -= 0.5
+        bvec[hidx] += 0.5
+    
+    
+r= np.linalg.solve(Cmat,bvec) 
+    
+D = dict(zip(teams,r))
+
+#print(D)
+keys = list(D.keys())
+values = list(D.values())
+sorted_value_index = np.flip(np.argsort(values))
+#an array that can be used if we feel like it
+sorted_D = {keys[i]: values[i] for i in sorted_value_index}
+
+#for printing the rankings in rating order
+count = 1
+for i in sorted_value_index:
+    print(f'{count}) {keys[i]}: {values[i]:4.4f}')
+    count += 1
