@@ -1,0 +1,46 @@
+################ Unweighted Colley Scheme ################
+nteams = len(teams)
+
+Cmat = 2.*np.identity(nteams)
+bvec = np.ones(nteams)
+
+for i in range(len(games)):
+    
+    ateam = games[i][0]
+    hteam = games[i][1]
+    ascore = games[i][2]
+    hscore = games[i][3]
+    
+    hidx = teams.index(hteam)
+    aidx = teams.index(ateam)
+    
+    Cmat[aidx,aidx] += 1
+    Cmat[hidx,hidx] += 1
+
+    Cmat[hidx,aidx] -= 1
+    Cmat[aidx,hidx] -= 1
+        
+    if (ascore > hscore):
+        bvec[aidx] += 0.5
+        bvec[hidx] -= 0.5
+    elif (hscore > ascore):
+        bvec[aidx] -= 0.5
+        bvec[hidx] += 0.5
+    
+    
+r= np.linalg.solve(Cmat,bvec) 
+    
+D = dict(zip(teams,r))
+
+#print(D)
+keys = list(D.keys())
+values = list(D.values())
+sorted_value_index = np.flip(np.argsort(values))
+#an array that can be used if we feel like it
+sorted_D = {keys[i]: values[i] for i in sorted_value_index}
+
+#for printing the rankings in rating order
+count = 1
+for i in sorted_value_index:
+    print(f'{count}) {keys[i]}: {values[i]:4.4f}')
+    count += 1
