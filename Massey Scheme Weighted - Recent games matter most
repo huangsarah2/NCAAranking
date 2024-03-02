@@ -1,0 +1,79 @@
+################### Massey Scheme Weighted ################################
+######### As the season goes on, most recent games matter the most ########
+numgames=len(games)
+nteams=len(teams)
+
+#create tournament as an 8x8 matrix of zeros
+Tournament = np.zeros((numgames,nteams))
+b=np.zeros((numgames, 1))
+#print(type(Tournament))
+
+#do one game for each --store in matrix
+#would like to take the difference of the scores and who loses this is to fill in A
+
+for i in range(numgames):
+    ateam = games[i][0]
+    hteam = games[i][1]
+    ascore = games[i][2]
+    hscore = games[i][3]
+    
+    h_index = teams.index(hteam) #index associated with home team
+    a_index = teams.index(ateam)
+    
+    gameday = date(games[i][4], int(games[i][5]), int(games[i][6]))
+    numdays = abs(gameday-startday).days
+    
+    #weighting schemes
+    W[i,i] = 1 + 0.2*(numdays//7) #mod 7 by the week. every 5 weeks gain one unit of weighting
+ 
+    #fill in the matrix
+    if (hscore >= ascore):
+        Tournament[i, h_index] = 1
+        Tournament[i, a_index] = -1
+        b[i] = int(hscore) - int(ascore)
+        
+    elif (ascore > hscore):
+        Tournament[i, h_index] = -1       
+        Tournament[i, a_index] = 1
+        #b is the vector of the differences of scores, but first cast as integers
+        b[i] = int(ascore) - int(hscore)        
+    Tournament
+        
+#if they tie, it is just a row of zeros, now solve with the method of least squares
+MAT = np.dot(W, Tournament)
+MAT = np.dot(np.transpose(Tournament), MAT)
+
+BT = np.dot(W,b)
+BT = np.dot(np.transpose(Tournament), BT)
+
+#replace the bottom row with all ones to prevent singular matrix
+
+MAT[-1] = np.ones(nteams)
+BT[-1] = 0
+
+#solve for r
+
+r = np.linalg.solve(MAT, BT)
+
+for i in range(0, nteams):
+    (f"{teams[i]}: {r[i][0]:4.2f}")
+
+r2 = np.zeros(len(r))
+
+for i in range(0, nteams):
+    r2[i] = r[i][0]
+D = dict(zip(teams,r2))
+# print(D)
+keys = list(D.keys())
+values = list(D.values())
+sorted_value_index = np.flip(np.argsort(values))
+#an array that can be used if we feel like it
+sorted_D = {keys[i]: values[i] for i in sorted_value_index}
+
+#for printing the rankings in rating order
+count = 1
+print("Massey Scheme Weighted:")
+print("As the season goes on, most recent games matter the most")
+for i in sorted_value_index:
+    print(f'{count}) {keys[i]}: {values[i]:4.4f}')
+    count += 1
