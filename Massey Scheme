@@ -3,7 +3,6 @@
 numgames=len(games)
 nteams=len(teams)
 
-#create tournament as an 8x8 matrix of zeros
 Tournament = np.zeros((numgames,nteams))
 b=np.zeros((numgames, 1))
 #print(type(Tournament))
@@ -45,9 +44,6 @@ B2[-1] = 0
 #solve for r
 
 r = np.linalg.solve(M2, B2)
-
-for i in range(0, nteams):
-    print(f"{teams[i]}: {r[i][0]:4.2f}")
 
 r2 = np.zeros(len(r))
 
