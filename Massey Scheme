@@ -49,13 +49,20 @@ r = np.linalg.solve(M2, B2)
 for i in range(0, nteams):
     print(f"{teams[i]}: {r[i][0]:4.2f}")
 
-#printing out the sorted list
-np.set_printoptions(precision=4, linewidth=100)
-zipped = zip(r,teams)
-sortedData = (sorted(zipped))
+r2 = np.zeros(len(r))
 
-print(sortedData)
+for i in range(0, nteams):
+    r2[i] = r[i][0]
+D = dict(zip(teams,r2))
+# print(D)
+keys = list(D.keys())
+values = list(D.values())
+sorted_value_index = np.flip(np.argsort(values))
+#an array that can be used if we feel like it
+sorted_D = {keys[i]: values[i] for i in sorted_value_index}
 
-for i in range(0, len(sortedData)):
-    print(f"{sortedData[i][0]:4.2f}: {sortedData[i][1]}")
-    #print("\n")
+#for printing the rankings in rating order
+count = 1
+for i in sorted_value_index:
+    print(f'{count}) {keys[i]}: {values[i]:4.4f}')
+    count += 1
