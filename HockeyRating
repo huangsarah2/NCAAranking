@@ -1,0 +1,45 @@
+import time
+from datetime import date
+startday = date(2024,0o1,0o3)
+               
+numgames = len(games)
+numteams = len(teams)
+AN = np.zeros((numgames, numteams))
+BN = np.zeros((numgames,1))
+W = np.zeros((numgames, numgames))
+               
+for i in range(0,numgames,1):
+    ateam = games[i][0]
+    ascore = int(games[i][2])
+    hteam = games[i][1]
+    hscore = int(games[i][3])
+    
+    h_index = teams.index(hteam) #index associated with home team
+    a_index = teams.index(ateam)
+ 
+    gameday = date(games[i][4], int(games[i][5]), int(games[i][6]))
+    numdays = abs(gameday-startday).days
+    
+    #weighting schemes
+    W[i,i] = 1+ 0.2*(numdays//7) #mod 7 by the week. every 5 weeks gain one unit of weighting
+    
+    #fill in the matrix
+    if (hscore >= ascore):
+        AN[i, h_index] = 1
+        AN[i, a_index] = -1
+        BN[i] = int(hscore) - int(ascore)
+        
+    elif (ascore > hscore):
+        AN[i, h_index] = -1       
+        AN[i, a_index] = 1
+        #b is the vector of the differences of scores, but first cast as integers
+        BN[i] = int(ascore) - int(hscore)   
+MAT = np.dot(W, AN)
+MAT = np.dot(np.transpose(AN), MAT)
+
+BT = np.dot(W,BN)
+BT = np.dot(np.transpose(AN), BT)
+
+r = np.linalg.solve(MAT, BT)
+for i in range(0, numteams):
+    print(f"{teams[i]}: {r[i][0]:4.2f}")
