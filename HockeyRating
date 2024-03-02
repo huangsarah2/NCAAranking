@@ -43,3 +43,50 @@ BT = np.dot(np.transpose(AN), BT)
 r = np.linalg.solve(MAT, BT)
 for i in range(0, numteams):
     print(f"{teams[i]}: {r[i][0]:4.2f}")
+
+#################################################################################################
+#################################################################################################
+#Weighted Elo Ranking
+numgames = len(games)
+scale = 400
+K = 30
+
+names = ['Wis.-Stevens Point','Wis.-Stout','Wis.-Eau Claire','Northland','UW-River Falls','Wis.-Superior']
+elo = [1000,1000,1000,1000,1000,1000]
+
+
+for i in range(0,numgames):
+    hteam = games[i][0]
+    ateam = games[i][1]
+    hscore = games[i][2]
+    ascore = games[i][3]
+    
+     #get ratings
+    hrat = elo[teams.index(hteam)]
+    arat = elo[teams.index(ateam)]
+    diff = hrat - arat
+    
+    #calc expected results/probs of winning
+    hexp = 1./(1+10**(diff/scale))
+    aexp = 1. - hexp
+    
+    #update ratings
+    if (hscore > ascore): #home team win
+        elo[teams.index(hteam)] +=K*(1. - hexp)
+        elo[teams.index(ateam)] +=K*(0. - aexp)
+
+    elif (ascore > hscore): #away team win
+        elo[teams.index(hteam)] +=K*(0. - hexp)
+        elo[teams.index(ateam)] +=K*(1. - aexp)
+
+
+    #no else or draws needed
+    
+    #[print(name,elo[names.index(name)]) for name in names ]
+#[print(name,elo[names.index(name)]) for name in names ];
+
+zipped = zip(elo,teams)
+sortedData = (sorted(zipped))
+
+for i in range(len(teams)):
+    print(sortedData[len(teams) -1-i][1], "", sortedData[len(teams)-1 -i][0])
