@@ -1,0 +1,13 @@
+# winstreak array
+winstreak = np.empty((len(teams),2), dtype='U20')
+
+for stats in tstats:
+    winstreak[tstats.index(stats)][0] = stats[0]
+    if stats[7][:1] == 'W': #the first character at index 7 is a W
+        winstreak[tstats.index(stats)][1] = stats[7][4:]
+    else:
+        winstreak[tstats.index(stats)][1] = '0'
+            
+print(winstreak)
+
+# for using a winstreak as an actual number use int(winstreak[0][1]) for example
