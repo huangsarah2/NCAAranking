@@ -1,0 +1,165 @@
+import numpy as np
+import matplotlib.pyplot as plt
+%matplotlib inline
+import requests #lets us pull the webpage from the internet
+from bs4 import BeautifulSoup 
+
+
+# This code block pulls the names of the NCAA Division 1 Men's Basketball teams from an NCAA webpage
+
+url = "https://www.ncaa.com/standings/basketball-men/d1" #url for the desired webpage
+page = requests.get(url)
+soup = BeautifulSoup(page.content, "html.parser") #object that helps read the webpage
+
+if (page.status_code == 200): #check for a successful access to the webpage
+    ts = soup.find_all(class_="standings-team") #finds and stores all <span class="game...">x</span>
+
+teams = [None]*len(ts)  #initialize and create empty array of teams
+
+print(f"Found {len(teams)} teams.")
+
+for i in range(0,len(teams)):
+    teams[i] = ts[i].text #takes the team names out of the object being held by t[i]
+
+
+# This code block pulls the winstreak data of all teams from the same webpage the team names were pulled from
+
+tstats = [] #team statistics array
+
+tables = soup.findAll('table') #finds and holds all <table> html elements on the webpage
+
+for table in tables: 
+    table_body = table.find('tbody') #locates the next table_body
+    rows = table_body.find_all('tr') #locates each table row (tr in html) of the table_body
+    for row in rows: 
+        cols = row.find_all('td') #locates each table data (td in html) element
+        cols = [ele.text.strip() for ele in cols] #casts each data type to string and removes whitespace from begining and end of string 
+        tstats.append([ele for ele in cols if ele]) #adds the data to tstats if it exists
+        
+winstreak = np.empty((len(teams),2), dtype='U20') #winstreak array
+
+for stats in tstats:
+    winstreak[tstats.index(stats)][0] = stats[0] #adds team name
+    if stats[7][:1] == 'W': #make sure W is the first character in the streak data
+        winstreak[tstats.index(stats)][1] = stats[7][4:]
+    else:
+        winstreak[tstats.index(stats)][1] = '0' #losing streaks are all implemented as 0
+
+# This code block loops over the season dates and extracts the games
+
+#years, months, and days of the season
+years = [2023,2023,2024,2024, 2024]
+months = ["11", "12", "01", "02", "03"]
+days = np.arange(1,32) #include left endpoint but don't include right endpoint
+
+#initialize and create empty numpy tournament matrix
+tmat = np.zeros((len(teams),len(teams)))
+gamectr = 0
+games = []
+
+for j in range(0,len(months)):
+    for day in days:
+        if day < 10: #accounts for single digit days 
+            url = f"https://www.ncaa.com/scoreboard/basketball-men/d1/{years[j]}/{months[j]}/0{day}/all-conf"
+        else:
+            url = f"https://www.ncaa.com/scoreboard/basketball-men/d1/{years[j]}/{months[j]}/{day}/all-conf"
+        page = requests.get(url) # gets page
+        if (page.status_code == 200):
+            soup = BeautifulSoup(page.content, "html.parser")
+            names = soup.find_all("span", class_="gamePod-game-team-name") #order of elements on the webpage
+            scores = soup.find_all("span", class_="gamePod-game-team-score")
+            
+            N = int(len(names)/2) #number of games
+            
+            for i in range(0,int(len(names)/2)):
+                if ((names[2*i].text in teams) and (names[2*i+1].text in teams)):  #make sure both teams are in WIAC
+                    if not((scores[2*i].text == "") or (scores[2*i].text == "")): #make sure both teams have a score, ie game played
+                        gamectr += 1 #updates game counter
+                        games.append([names[2*i].text,names[2*i+1].text,scores[2*i].text,scores[2*i+1].text,years[j],months[j],day])
+                        if (int(scores[2*i].text) > int(scores[2*i+1].text)):  #away team win
+                            tmat[teams.index(names[2*i].text), teams.index(names[2*i+1].text)]+=1 
+                        if (int(scores[2*i+1].text) > int(scores[2*i].text)):  #home team win
+                            tmat[teams.index(names[2*i+1].text), teams.index(names[2*i].text)]+=1
+                        if (int(scores[2*i].text) == int(scores[2*i+1].text)):   #draw
+                            tmat[teams.index(names[2*i+1].text), teams.index(names[2*i].text)]+=0.5
+                            tmat[teams.index(names[2*i].text), teams.index(names[2*i+1].text)]+=0.5
+            
+print("")
+print(f"Processed {gamectr} games!")
+print("")
+
+import time
+from datetime import date
+startday = date(2024,11,0o6) #first day of season in year, month, day
+
+numgames=len(games)
+nteams=len(teams)
+
+Tournament = np.zeros((numgames,nteams))
+b=np.zeros((numgames, 1))
+W = np.zeros((numgames,numgames))
+
+for i in range(numgames):
+    ateam = games[i][0]
+    hteam = games[i][1]
+    ascore = games[i][2]
+    hscore = games[i][3]
+    
+    h_index = teams.index(hteam) #index associated with home team
+    a_index = teams.index(ateam) #index associated with away team
+ 
+    #fill in the Tournament matrix
+    if (hscore >= ascore): #home team wins
+        Tournament[i, h_index] =+ .9 
+        Tournament[i, a_index] =+ -1
+        b[i] = int(hscore) - int(ascore) #b is the vector of the differences of scores
+        
+    elif (ascore > hscore): #away team wins
+        Tournament[i, h_index] =+ -1       
+        Tournament[i, a_index] =+ 1.5 #boost to winning away team
+        b[i] = int(ascore) - int(hscore)  
+        
+    #if they tie, it is just a row of zeros
+        
+    gameday = date(games[i][4], int(games[i][5]), int(games[i][6])) #year, month, day
+    numdays = abs(gameday-startday).days
+    
+    #weighting scheme
+    W[i,i] = 1 + 0.2*(numdays//7) #mod 7 by the week. every 5 weeks gain one unit of weighting
+
+#solve with the method of least squares
+       
+MAT = np.dot(W, Tournament)
+MAT = np.dot(np.transpose(Tournament), MAT)
+
+BT = np.dot(W,b)
+BT = np.dot(np.transpose(Tournament), BT)
+
+#replace the bottom row with all ones to prevent singular matrix
+MAT[-1] = np.ones(nteams)
+BT[-1] = 0
+
+#solve for r
+r = np.linalg.solve(MAT, BT)
+
+#put desired contents of r into r2
+r2 = np.zeros(len(r))
+
+for i in range(0, nteams):
+    r2[i] = r[i][0]
+    
+#implement win streak
+for i in range(0, nteams):
+    r2[i] = r2[i] + .1*int(winstreak[i][1]) #increase ranking by 10% of the teams win streak
+
+#sorting rankings in order paired with team name
+D = dict(zip(teams,r2))
+keys = list(D.keys())
+values = list(D.values())
+sorted_value_index = np.flip(np.argsort(values))
+
+#printing sorted rankings
+count = 1
+for i in sorted_value_index:
+    print(f'{count}) {keys[i]}: {values[i]:4.4f}')
+    count += 1
