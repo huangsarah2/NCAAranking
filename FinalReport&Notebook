@@ -11,35 +11,38 @@ url = "https://www.ncaa.com/standings/basketball-men/d1" #url for the desired we
 page = requests.get(url)
 soup = BeautifulSoup(page.content, "html.parser") #object that helps read the webpage
 
-if (page.status_code == 200): #check for a successful access to the webpage
-    ts = soup.find_all(class_="standings-team") #finds and stores all <span class="game...">x</span>
+#finds all teams
+if (page.status_code == 200):
+    ts = soup.find_all(class_="standings-team")
 
-teams = [None]*len(ts)  #initialize and create empty array of teams
+teams = [None]*len(ts)
 
 print(f"Found {len(teams)} teams.")
 
+#takes the team names out of the object being held by t[i]
 for i in range(0,len(teams)):
-    teams[i] = ts[i].text #takes the team names out of the object being held by t[i]
-
+    teams[i] = ts[i].text 
 
 # This code block pulls the winstreak data of all teams from the same webpage the team names were pulled from
 
-tstats = [] #team statistics array
+tstats = []
 
-tables = soup.findAll('table') #finds and holds all <table> html elements on the webpage
+tables = soup.findAll('table')
 
+#adds the standings data to the tstats array
 for table in tables: 
-    table_body = table.find('tbody') #locates the next table_body
-    rows = table_body.find_all('tr') #locates each table row (tr in html) of the table_body
+    table_body = table.find('tbody')
+    rows = table_body.find_all('tr') 
     for row in rows: 
-        cols = row.find_all('td') #locates each table data (td in html) element
-        cols = [ele.text.strip() for ele in cols] #casts each data type to string and removes whitespace from begining and end of string 
-        tstats.append([ele for ele in cols if ele]) #adds the data to tstats if it exists
+        cols = row.find_all('td')
+        cols = [ele.text.strip() for ele in cols] 
+        tstats.append([ele for ele in cols if ele])
         
 winstreak = np.empty((len(teams),2), dtype='U20') #winstreak array
 
+#adds the streak data associated with team name to winstreak array 
 for stats in tstats:
-    winstreak[tstats.index(stats)][0] = stats[0] #adds team name
+    winstreak[tstats.index(stats)][0] = stats[0]
     if stats[7][:1] == 'W': #make sure W is the first character in the streak data
         winstreak[tstats.index(stats)][1] = stats[7][4:]
     else:
@@ -50,13 +53,14 @@ for stats in tstats:
 #years, months, and days of the season
 years = [2023,2023,2024,2024, 2024]
 months = ["11", "12", "01", "02", "03"]
-days = np.arange(1,32) #include left endpoint but don't include right endpoint
+days = np.arange(1,32)
 
 #initialize and create empty numpy tournament matrix
 tmat = np.zeros((len(teams),len(teams)))
 gamectr = 0
 games = []
 
+#loop through to find all games
 for j in range(0,len(months)):
     for day in days:
         if day < 10: #accounts for single digit days 
@@ -88,6 +92,9 @@ print("")
 print(f"Processed {gamectr} games!")
 print("")
 
+
+# This code block calculates the ratings of the teams and orders them to find the rankings of the teams.
+
 import time
 from datetime import date
 startday = date(2024,11,0o6) #first day of season in year, month, day
@@ -99,6 +106,7 @@ Tournament = np.zeros((numgames,nteams))
 b=np.zeros((numgames, 1))
 W = np.zeros((numgames,numgames))
 
+#calculates ratings by going over each game
 for i in range(numgames):
     ateam = games[i][0]
     hteam = games[i][1]
@@ -121,6 +129,7 @@ for i in range(numgames):
         
     #if they tie, it is just a row of zeros
         
+    #calculating time from start of season for Recent Games Matter Most weight
     gameday = date(games[i][4], int(games[i][5]), int(games[i][6])) #year, month, day
     numdays = abs(gameday-startday).days
     
