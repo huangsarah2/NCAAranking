@@ -50,7 +50,7 @@
 \newcommand{\HRule}{\rule{\linewidth}{0.5mm}} % Defines a new command for the horizontal lines, change thickness here
 
 \center % Center everything on the page
-\includegraphics[scale=0.8]{Stout.jpg}\\[1cm]
+\includegraphics [scale=0.8]{Stout.jpg}\\[1cm]
 
 \textsc{\LARGE University of Wisconsin Stout}\\[1.5cm]
 \textsc{\Large Math Modeling}\\[0.5cm]
@@ -72,7 +72,7 @@ Rachel \textsc{Schultz}\\
 \begin{minipage}{0.4\textwidth}
 \begin{flushright} \large
 \emph{\textbf{Lecturer:}} \\
-Prof. dr. Tyler \textsc{Skorczewski}
+Prof. Dr. Tyler \textsc{Skorczewski}
 \end{flushright}
 \end{minipage}\\[2cm]
 
@@ -94,17 +94,17 @@ Prof. dr. Tyler \textsc{Skorczewski}
 \newpage 
 \addcontentsline{toc}{section}{ABSTRACT}
 \section*{ABSTRACT}
-This study aims to formulate a mathematical rating system for Men's NCAA Division 1 basketball teams, facilitating their ranking and aiding in the completion of the March Madness tournament bracket. Our focus encompasses all season games leading up to the tournament, with a particular emphasis on the significance of recent games, considering them most influential due to observed team improvement. Notably, our methodology involves negating the impact of home team advantage, as the games are hosted on neutral territories. Additionally, we prioritize acknowledging the advantage held by teams with ongoing win streaks over those with low to zero streaks.
-
-We examine the frequency of records in a series of real numbers, x1, x2, x3 · · · where
-any xi maybe 1 with the probability of p and 0 with the probability of 1−p = q. A record
+We want something like this: The purpose of this paper is to develop mathematical tools that can investigate sequences of random numbers and how they form records. We are specifically interested in
+the kind of records that can be categorised as "winning streaks", records of consecutive
+wins. We examine the frequency of records in a series of real numbers, x1, x2, x3 · · · where
+any xi may be 1 with the probability of p and 0 with the probability of 1−p = q. A record
 is, in this paper, defined as a streak of 1s that is longer than any of the previous streaks.
 Formulas are deduced for the probability that the first record ends at any given index
 and that any given nth record is of length l. Expected values are then calculated. These
-formulas can be used to analyze if records in sequences are the results of randomness or
+formulas can be used to analyse if records in sequences are the results of randomness or
 indicate underlying trends.
 
-This project involves collaborative efforts within groups to design and implement a unique scheme for rating and ranking NCAA Division 1 men's college basketball teams based on the data from the 2023-2024 season. Participants will employ analytical methods and statistical approaches to calculate their team rankings, and subsequently utilize these rankings to complete an NCAA tournament bracket. The project culminates in a competition where the effectiveness of each group's rating scheme will be evaluated to determine the most successful methodology for predicting team performance in the tournament. Through this hands-on exercise, participants will gain practical experience in building and assessing ranking systems for collegiate sports, fostering a deeper understanding of the dynamics within NCAA Division 1 men's college basketball. (add more info)
+This project involves collaborative efforts within groups to design and implement a unique scheme for rating and ranking NCAA Division 1 men's college basketball teams based on the data from the 2023-2024 season. Participants will employ analytical methods and statistical approaches to calculate their team rankings, and subsequently utilize these rankings to complete an NCAA tournament bracket. The project culminates in a competition where the effectiveness of each group's rating scheme will be evaluated to determine the most successful methodology for predicting team performance in the tournament. Through this hands-on exercise, participants will gain practical experience in building and assessing ranking systems for collegiate sports, fostering a deeper understanding of the dynamics within NCAA Division I men's college basketball. (add more info)
 
 
 
@@ -122,33 +122,247 @@ Your abstract should be intelligible on its own, without a reader’s having to 
 \pagenumbering{arabic}
 \section{\textbf{Introduction}}
 
+Each year, the National Collegiate Athletic Association (NCAA) organizes a national championship for Division I basketball teams. These series of games, known as March Madness, pit the best college basketball teams in the US against each other until one team emerges as the champion. Due to the volatile nature of college basketball games, a favorite American past-time revolves around filling out brackets of teams to predict the champion of March Madness. In 2022, some 17 percent of American adults placed bets on the results of March Madness, and it is estimated that this year (2024), the cash bet across the US will total around fifteen billion dollars (Statista). Bets can be placed on games, tournaments\\
 
-\section{\textbf{Assumptions}}
+Canonical Correlation Analysis is a multivariate statistical model that facilitates the study of inter-relationships among sets of multiple dependent variables and multiple independent variables (Green, 1978). It focuses on the correlation between a linear combination of the variables in one set and a linear combination of variables in another set. The pairs of linear combinations are called canonical variables and their correlations are called canonical correlations (Johnson and Wichern, 2007). Canonical correlation analysis determines a set of canonical variates that are orthogonal linear combinations of the variables within each set that best explain the variability both within and between sets. \\
 
-In the evaluation process for March Madness teams, it is imperative to recognize that each game carries equal significance, as a single loss results in elimination for the teams involved. This equality in importance emphasizes the notion that games at the tournament's beginning should be weighed as heavily as those in the finals, preventing the need for recalculating ratings and rankings after each game. The limited practice time between matches underscores the importance of a team's current state as a reliable measure of its performance throughout the tournament. March Madness being held in neutral territories leads to the assumption of impartial and evenly distributed attendance for both teams, eliminating the influence of home or away distinctions. To further level the playing field, home team advantage is disregarded when calculating ratings and rankings, acknowledging that success in neutral territories is crucial for tournament advancement.
+In this study the main aim was to use the four paper variables (breaking length, elastic modulus, stress at failure and burst length) for the principal components analysis and use the canonical correlation analysis to study the association between these paper variables and the pulp fiber characteristics.
 
-\parindent=.7cm
-
-Moreover, the assumption extends to the disregard of game times within a tournament round, treating them as uniform and not requiring specific consideration. The collective skill level of individual players is presumed to be contained in the team ratings, emphasizing overall team proficiency rather than relying heavily on select players. This all-inclusive approach extends to the assumption of relatively comparable skill levels across conferences, with due consideration for the league's competitiveness where a longer win streak holds more significance.
-
-In the January 2022 study titled "The Hot Hand in the Wild," authored by Wayne Winston, an operations researcher at Indiana University Bloomington, and Konstantinos Pelechrinis, a computer scientist at the University of Pittsburgh, compelling evidence emerges indicating that individual players can indeed demonstrate the hot hand to varying degrees. This suggests that players can consistently achieve a streak of successful shots beyond what would be expected by random chance. Moreover, it is commonly observed that teams with the most substantial win streaks often emerge as winners of their respective conferences, securing an assured spot in the tournament. This observation prompts our assumption that win streaks hold significance and should be considered in the process of rating and ranking the teams.
-
-Drawing insights from Andy Wittry's article "Why losing streaks shouldn't matter when filling out your NCAA tournament bracket," the assumption is made that losing streaks are not a significant factor to consider. Teams entering the NCAA tournament on a losing streak are considered relatively rare, given the single-elimination nature of conference tournaments and the exclusion of teams on a losing streak that earned an automatic bid.
-
-Additionally, when creating the tournament rating and ranking of teams, there is an assumption that early-season games hold less weight than more recent ones. This assumption is grounded in the belief that teams generally improve throughout the season due to consistent practice and increased strength, shaping the criteria for evaluating team performance leading up to March Madness.
-
+\section{\textbf{Data Description}}
+The data set was on the characteristics of Pulp fibers and Paper made from them which comprises of eight variables and 62 observations. Measurement on characteristic of pulp fibers and the paper made from them were taken and recorded as follows: \\
+\textit{Paper properties}: $Y_1=x_1^{(1)}$= breaking length, $Y_2=x_2^{(1)}$= elastics module, $Y_3=x_3^{(1)}$= stress at failure and $Y_4=x_4^{(1)}$= burst strength. \\
+\textit{Pulp fibers properties}: $Z_1=x_1^{(2)}$= arithmetic fiber length, $Z_2=x_2^{(2)}$= long fiber fraction, $Z_3=x_3^{(2)}$= fine fiber fraction and $Z_4=x_4^{(2)}$= zero span tensile.
 
 \section{Methodology}
 \subsection{Exploratory Data Analysis}
+Summary statistics (mean and standard deviation) were computed for Paper variable  and  Pulp fibres separately and for the combined dataset in order to see how they behave. 
+\subsection{Principal Components Analysis}
+Principal component can be defined as a linear combination of measurements with maximum variability. Principal component
+analysis looks for a few linear combinations of the variables that can be used to summarize the data without losing too much information in the process. Here, PCA was applied for the Paper variable  and  Pulp fibres datasets separately.\\ 
+The first principal component is calculated in such that it accounts for the greatest possible variance in the dataset.
+Of course, the variance of first linear combination $Y_1$ was as large as possible by choosing largest eigenvalue and its corresponding eigenvectors. The second principal component is calculated in the same way, with the condition that it is
+uncorrelated with (i.e., perpendicular to) the first principal component and that it accounts for the next highest variance. This continues until a total of $p$ principal components have been calculated, equal to the
+original number of variables(Johnson and Wichern 2007).Statistics results and graphical plots are employed to summarize the result of these analyses.
 
+
+
+\subsection{Canonical Correlation Analysis}
+
+The purpose of canonical correlation analysis is to identify and quantify the associations between two sets of variables, based on the correlation between a linear combination of the variables in one set and a linear combination of the variables in another set. The idea is to determine the pair of linear combinations having largest correlation among all pairs uncorrelated to the initially selected pairs and so on (Johnson and Wichern, 2007).\\ \\
+Here, canonical correlation analysis on the data was performed for both Paper variable  and  Pulp fibres datasets. The main interest is to understand the correlation between the groups.Therefore, the two linear combinations are of interest, such that their correlation is maximal (Khattree and Naik, 2000).\\ \\ 
+The root statistics (Wilks' Lambda, Pillai's Trace, Hotelling-Lawley Trace and Roy's Greatest Root) were used to test whether the canonical correlations were important. Finally, canonical redundancy analysis was conducted in order to measure the amount of variability explained by the canonical variables.
+
+
+\subsection{Software}
+	
+	SAS version 9.4  was used for the statistical analysis
 
 \section{Results and Discussion}
+\subsection{Summary Statistics}
+The mean and standard deviation of the pulp fiber and paper characteristic are presented in Table 1 below. We observe the difference in the variables dimensions and thus these results suggest that we should use the correlation structure to obtain the canonical variables in the canonical correlation analysis.
+\begin{table}[htbp]
+  \centering
+  \caption{Mean and standard deviation of variables for the pulp fiber and paper characteristics.}
+    \begin{tabular}{lrrrrrr}
+    \toprule
+    \textbf{Characteristics} & \textbf{Mean} & \textbf{Standard deviation} \\
+    \midrule
+    \textbf{Paper} &  & \\
+    Breaking length (BL) & 21.7228 & 2.8815 \\
+    Elastic modulus (EM) & 7.2662 & 0.7165 \\
+    Stress at failure (SF) & 5.6375 & 1.4629 \\
+    Burst strength (BS) & 1.0188 & 0.6930 \\
+    \midrule
+    \textbf{Pulp fiber} &  & \\
+    Arithmetic fiber length & -0.0218 & 0.2495  \\
+    Long fiber fraction & 39.0327 & 14.8678 \\
+    Fine fiber fraction & 26.6777 & 17.5613 \\
+    Zero span tensile & 1.0668 & 0.0295 \\
+    \bottomrule
+    \end{tabular}%
+  \end{table} \\ 
 
+\subsection{Principal Component Analysis}To summarize the data concisely, we conducted the  principal component analysis and results as seen below.\\
+
+    
+    \begin{table}[htbp]
+  \centering
+  \caption{Covariance Matrix}
+    \begin{tabular}{crrrr}
+    \toprule
+    \multicolumn{5}{c}{\textbf{Covariance Matrix}} \\
+    \midrule
+    \textbf{} & \multicolumn{1}{c}{\textbf{BL}} & \multicolumn{1}{c}{\textbf{EM}} & \multicolumn{1}{c}{\textbf{SF}} & \multicolumn{1}{c}{\textbf{BS}} \\
+    \textbf{BL} & 8.302870935 & 1.88664 & 4.147318117 & 1.97206 \\
+    \textbf{EM} & 1.886636297 & 0.51336 & 0.987585105 & 0.43431 \\
+    \textbf{SF} & 4.147318117 & 0.98759 & 2.140045761 & 0.98797 \\
+    \textbf{BS} & 1.972056208 & 0.43431 & 0.987966296 & 0.48027 \\
+    \bottomrule
+    \end{tabular}%
+  \label{tab:addlabel}%
+\end{table}%
+This yields a total variance of 11.436548105. The eigen values of the correlation matrix and the proportion of the variance explained by the principal components is seen in table 3 below.
+\begin{table}[htbp]
+  \centering
+  \caption{Eigenvalues of the Covariance Matrix}
+    \begin{tabular}{crrrr}
+    \toprule
+    \multicolumn{5}{c}{\textbf{Eigenvalues of the Covariance Matrix}} \\
+    \midrule
+    \textbf{} & \multicolumn{1}{c}{\textbf{Eigenvalue}} & \multicolumn{1}{c}{\textbf{Difference}} & \multicolumn{1}{c}{\textbf{Proportion}} & \multicolumn{1}{c}{\textbf{Cumulative}} \\
+    \textbf{PC1} & 11.2950086 & 11.1914 & 0.9876 & 0.9876 \\
+    \textbf{PC2} & 0.1036205 & 0.07175 & 0.0091 & 0.9967 \\
+    \textbf{PC3} & 0.0318692 & 0.02582 & 0.0028 & 0.9995 \\
+    \textbf{PC4} & 0.0060497 &       & 0.0005 & 1 \\
+    \bottomrule
+    \end{tabular}%
+  \label{tab:addlabel}%
+\end{table}% 
+\\
+From table 3 above the first eigenvalue explains 98.8\% of the total variability. Thus we can summarize our four original outcome variables using only one principal component since it captures nearly all the variability explained by our four original variables.\\
+This could also be seen clearly on the scree plot below:\\
+
+\includegraphics[scale=1.5]{Scree_plot.JPG}\\[2cm]\\
+
+The eigen vectors are seen in table 4 below:\\
+\begin{table}[htbp]
+  \centering
+  \caption{The Eigenvectors}
+    \begin{tabular}{crrrr}
+    \toprule
+    \multicolumn{5}{c}{\textbf{Eigenvectors}} \\
+    \midrule
+    \textbf{} & \multicolumn{1}{c}{\textbf{Prin1}} & \multicolumn{1}{c}{\textbf{Prin2}} & \multicolumn{1}{c}{\textbf{Prin3}} & \multicolumn{1}{c}{\textbf{Prin4}} \\
+    \textbf{BL} & 0.856478 & -0.36392 & -0.331541 & -0.1552 \\
+    \textbf{EM} & 0.197573 & 0.78586 & -0.497312 & 0.30995 \\
+    \textbf{SF} & 0.431271 & 0.45768 & 0.733054 & -0.2592 \\
+    \textbf{BS} & 0.20351 & -0.20127 & 0.324645 & 0.90149 \\
+    \bottomrule
+    \end{tabular}%
+  \label{tab:addlabel}%
+\end{table}%
+\newpage
+From the eigenvectors, the first principal component can be written as \\
+
+	PC1=0.856(BL) + 0.198(Em)  + 0.431(SF)  + 0.204(BS)\\\\ which is basically a linear combination of all the four orignal paper variables. So, it would be logical to develop a "paper strength" index for this first principal component since it does not only contain a linear combination of all the original paper variables but also captures the highest proportion of the variability explain by the paper original variables.
+ The strength of the first principal component and the original variables can also be shown on table 5 below:\\
+ \begin{table}[htbp]
+  \centering
+  \caption{Correlations of PC1 and PC2 with Original Paper variables}
+    \begin{tabular}{crrrrrr}
+    \toprule
+    \multicolumn{7}{c}{\textbf{ Correlation Coefficients}} \\
+    \midrule
+    \textbf{} & \multicolumn{1}{c}{\textbf{PC1}} & \multicolumn{1}{c}{\textbf{PC2}} & \multicolumn{1}{c}{\textbf{BL}} & \multicolumn{1}{c}{\textbf{EM}} & \multicolumn{1}{c}{\textbf{SF}} & \multicolumn{1}{c}{\textbf{BS}} \\
+    \multirow{2}[0]{*}{\textbf{PC1}} & 1     & 0     & 0.99895 & 0.92675 & 0.99079 & 0.98693 \\
+    \multirow{2}[0]{*}{\textbf{PC2}} & 0     & 1     & -0.04066 & 0.35307 & 0.10071 & -0.09349 \\
+    \bottomrule
+    \end{tabular}%
+  \label{tab:addlabel}%
+\end{table}%
+\\
+As seen in table 5 above, there are very high correlations between the first principal component and the original variables as expected compared to the second principal component if truely the first is the best linear combination of the original variables with the highest variance.\\
+In order to find out if there were outliers, the plot of PC1 and PC2 was performed as seen below:\\
+\includegraphics[scale=0.7]{gplot7.png}\\[0.5cm]\\
+As clearly seen in the graph above; there are few outlying observations in the data set (keep right on the graph)
+
+\subsection{ Canonical correlation analysis}
+In Table 6 below, the original correlation matrix among the variables for the Paper and Pulp fibers characteristic variables is presented. We can observe a high correlation of variables within group characteristics. The correlation between the two groups of variables was slightly lower, but still high, suggesting that the use of canonical variables maybe useful. Negative correlations between fine fiber fraction $x_3^{(2)}$ (pulp fiber characteristics) and all paper characteristics were observed, ranging from -0.57 to -0.54. For all other variables, the correlations were positive, ranging from 0.53 to 0.86 with the highest correlation being between zero span tensile $x_4^{(2)}$ and stress at failure $x_3^{(1)}$ with a value of 0.8651.   
+\begin{table}[htbp]
+  \caption{Original Correlation Matrix of the Pulp and Paper Characteristics.}
+    \begin{tabular}{lrrrr|rrrr}
+    \toprule
+      & \textbf{$x_1^{(1)}$} & \textbf{$x_2^{(1)}$} & \textbf{$x_3^{(1)}$} & \textbf{$x_4^{(1)}$} & \textbf{$x_1^{(2)}$} & \textbf{$x_2^{(2)}$} & \textbf{$x_3^{(2)}$} & \textbf{$x_4^{(2)}$} \\
+    \midrule
+    \textbf{$x_1^{(1)}$} & 1.0000 & 0.9138 & 0.9839 & 0.9876 & 0.6478 & 0.7350 & -0.5419 & 0.8218 \\
+    \textbf{$x_2^{(1)}$} & 0.9138 &	1.0000 &	0.9422 & 0.8747 & 0.5370 &	0.6085 &	-0.5560 & 0.8496 \\
+    \textbf{$x_3^{(1)}$} & 0.9839 &	0.9422 & 1.0000 & 0.9745 & 0.6807 &	0.7644 &	-0.5746 & 0.8651 \\
+    \textbf{$x_4^{(1)}$} & 0.9876 &	0.8747 & 0.9745 & 1.0000 & 0.7064 &	0.7963 &	-0.5634 & 0.8132 \\
+    \midrule
+    \textbf{$x_1^{(2)}$} & 0.6478 & 0.5370 & 0.6807 & 0.7064 & 1.0000 &	0.9056 &	-0.7334 & 0.7842\\
+    \textbf{$x_2^{(2)}$} & 0.7350 & 0.6085 & 0.7644 & 0.7963 & 0.9056 & 1.0000 &	-0.7110 & 0.7927 \\
+    \textbf{$x_3^{(2)}$} & -0.5419 & -0.5560 & -0.5746 & -0.5637 & -0.7334 & -0.7110 &	1.0000 &	-0.7846 \\
+    \textbf{$x_4^{(2)}$} & 0.8218 & 0.8496 & 0.8651 & 0.8132 & 0.7842 & 0.7927 &	-0.7846 & 1.0000\\
+    \bottomrule
+    \end{tabular}%
+  \end{table} \\ 
+The sample canonical variates are as below using the standardized canonical coefficients
+
+From the canonical structure in table 7 below, we see that from the pulp characteristics only the variable of fine fiber fraction $x_3^{(2)}$ gives negative correlation to the covariates pairs and that all the variables in the paper characteristics gives higher correlation to the covariate pairs.
+The correlation between the original variables and canonical variables of one group, e.g. Paper set, are much larger than the corresponding canonical correlation. 
+\begin{table}[htbp]
+  \caption{Correlations between the original and the canonical variables of the Standardized Paper and pulp fiber Characteristics.}
+    \begin{tabular}{lrrrr|rrrr}
+    \toprule
+      & \textbf{$x_1^{(1)}$} & \textbf{$x_2^{(1)}$} & \textbf{$x_3^{(1)}$} & \textbf{$x_4^{(1)}$} & \textbf{$x_1^{(2)}$} & \textbf{$x_2^{(2)}$} & \textbf{$x_3^{(2)}$} & \textbf{$x_4^{(2)}$} \\
+    \midrule
+    \textbf{paper1} & 0.9351 & 0.8869 &	0.9767 & 0.9518 & 0.7491 & 0.8307 &	-0.5959 & 0.8618 \\
+    \textbf{paper2} & -0.1261 &	-0.4280 & -0.1453 &	0.0147 & 0.3009 & 0.3144 &	0.0100 & -0.1885 \\
+    \textbf{paper3} & -0.0534 &	0.1306 & -0.0307 & 0.0127 & 0.0441 & 0.0472 &	-0.1940 & 0.0491 \\
+    \textbf{paper4} & -0.3270 &	-0.1148 & -0.1549 &	-0.3061 & 0.0378 & -0.0012 &	-0.0191 & 0.0159 \\
+    \midrule
+    \textbf{pulp1} & 0.8578 & 0.8136 & 0.8960 &	0.8731 & 0.8166 & 0.9056 & -0.6496 &	0.9395\\
+    \textbf{pulp2} & -0.1030 & -0.3496 & -0.1187 & 0.0120 & 0.3683 & 0.3848 &	0.0123 & -0.2307 \\
+    \textbf{pulp3} & -0.0142 & 0.0346 &	-0.0081 & 0.0034 & 0.1661 &	0.1779 &	-0.7309 & 0.1851 \\
+    \textbf{pulp4} & -0.0300 & -0.0105 & -0.0142 & -0.0281 & 0.4122 & -0.0126 & -0.2087 & 0.1730\\
+    \bottomrule
+    \end{tabular}%
+  \end{table} \\ 
+The canonical correlations of variables 1 and 2 are high as compared to variables 3 and 4 (Table 8). This suggests that the last two canonical variables are probably not necessary.  Also, the first canonical correlation is 0.9173 which is higher than any of the eight correlations between pulp fiber and paper variables (highest correlation=0.87 in table 3), indicating that we maximized the correlation between the two groups of variables. Given the magnitude of the first and second canonical correlation, one should expect the first canonical variable to explain much of the variability between sets variability but it is important to investigate whether or not the second, third and fourth canonical correlation represent much of the information contained in the data. According to the proportion of variability explained by each canonical variable in table 8, the results suggest that the first two canonical correlations seem to be sufficient to explain the structure between Pulp and Paper characteristics with 98.86\%.
+\begin{table}[htbp]
+  \caption{Canonical Correlation, corresponding eigenvalues and Likelihood ratio test.}
+    \begin{tabular}{lrrrrrrr}
+    \toprule
+      \textbf{Canonical} & \textbf{canonical} &  & \textbf{Proportion} & & \\
+      \textbf{variable} & \textbf{correlation} & \textbf{Eigenvalue} &   \textbf{of variability} & \textbf{Cummulative} & \textbf{Likelihood} & \textbf{P-value} \\
+      & \textbf{R} & & \textbf{Explained} & & \textbf{Ratio}  \\
+    \midrule
+    1 & 0.9173 & 5.3089 & 0.7175 & 0.7175 & 0.0486 & $<.0001$\\
+    2 & 0.8169 & 2.0063 & 0.2711 &	0.9886 & 0.3066 & $<.0001$ \\
+    3 & 0.2654 & 0.0758 & 0.0102 & 0.9989 & 0.9216 &  0.3305 \\
+    4 & 0.0917 & 0.0085 & 0.0011 &	1.0000 & 0.9916 &  0.4898 \\
+    \bottomrule
+    \end{tabular}%
+  \end{table} \\ 
+
+\indent Furthermore, in order to formally assess the importance of the first canonical correlation, roots statistics comparing the within and between variability are presented in table 5. These tests are testing the null hypothesis that all canonical correlations equal zero (that is, there is no correlation between Pulp fibers and Paper characteristics sets). The four root statistics were found to be highly significant at 5\% level of significance, indicating that there is an important correlation between the pulp fiber and paper variables. In order to assess how many canonical correlations are non-zero correlations, the likelihood ratio test for each canonical variable is presented in Table 8. This result indicates that the canonical correlations of the canonical variables 1 and 2 are different from zero, as previously suggested by the proportion of variability these two variables explain. Thus implying that there is a common structure described by two canonical variables.
+\begin{table}[htbp]
+  \centering
+  \caption{Multivariate Statistics and F Approximations}
+    \begin{tabular}{rrrrr}
+    \toprule
+    \textbf{Statistics} & \textbf{Value} & \textbf{F-value} & \textbf{P-value} \\
+    \midrule
+    Wilks' Lambda & 0.045  & 17.50   & $<.0001$ \\
+    Pillai's Trace  & 1.653  & 9.38   & $<.0001$ \\
+    Hotelling-Lawley Trace  & 7.324  & 24.53   & $<.0001$ \\
+    Roy's Greatest Root  & 5.309  & 75.65   & $<.0001$ \\
+    \bottomrule
+    \end{tabular}%
+  \end{table} \\
+  From the canonical redundancy analysis with standardized variance, although the first two canonical variables keep 98\% of common variability, they keep only about 78\% in the pulp fiber set and about 94\% of the paper set as a whole. Also, the common structure is approximately 64\% for the paper set of variables and 78\% for the pulp fiber set of variables . This can be seen in table 10 below
+\begin{table}[ht!]
+\centering
+\caption{Canonical redundancy analysis with standardized variance.}
+\begin{tabular}{c c c  | c c}
+\hline \hline
+\multicolumn{5}{c}{~~~~~~~~~~~~~~~~~~~~~~~~Pulp fiber variables ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Paper variables} \\ [0.5ex]
+\hline        
+  Canonical \ & Proportion of the ~~~~\ & Proportion of the    ~~~~~~~\ & Proportion of the \ & Proportion of the\\ 
+  variable \ & own canonical ~~~~\ & opposite canonical    ~~~~~~~\ & own canonical \ & opposite canonical \\
+  \ & variable ~~~~\ & variable    ~~~~~~~\ & variable \ & variable \\[0.5ex] \hline
+  1 \ & 0.6979 \ & 0.5873 \ & 0.8802 \ & 0.7407 \\ [0.5ex]
+  2 \ & 0.0843 \ & 0.0562 \ & 0.0551 \ & 0.0368 \\ [0.5ex]
+  3 \ & 0.1570 \ & 0.0111 \ & 0.0052 \ & 0.0004 \\ [0.5ex]
+  4 \ & 0.0609 \ & 0.0005 \ & 0.0594 \ & 0.0005 \\[0.5ex] \hline
+  \end{tabular}
+\end{table}
+  
 \section{Conclusion}
  In conclusion, from the principal component analysis, it seems the paper features can best be studies using just a single linear combination (first principal component) which explains nearly all the variability (98.7\%) explained by the original paper variables. Also, from the Canonical Correlation analysis, it is observed that the first two canonical variates are good summary measures of the two sets of pulp fiber and paper variables. We were able to reduce the number of original variables from 4 to 2 pairs of canonical variables, this was due to the high canonical correlation values obtained, and the significance of the likelihood ratio statistics for the two canonical correlations. The first two canonical correlations explains 98.86\% of the between groups correlations. 
 \newpage 
 \begin{thebibliography}{1}
-\item{1.} Pelechrinis K, Winston W. The hot hand in the wild. PLoS One. 2022 Jan 25;17(1):e0261890. doi: 10.1371/journal.pone.0261890. PMID: 35077477; PMCID: PMC8789340.
+\item{1.} Green, P. E. (1978). \textit{Analyzing Multivariate Data}. Hinsdale, Ill.: Holt, Rinehart, and Winston.
 
 \item{2.} Johnson, R., Wichern, D. (2007). \textit{Applied Multivariate Statistical Analysis}.
 6th Ed. London: Pearson.
